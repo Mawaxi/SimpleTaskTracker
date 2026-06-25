@@ -1,0 +1,54 @@
+
+
+---
+
+# 📄 PROJECT REPORT: SimpleTaskTracker
+**Developer:** Mawaxi  
+**Language:** Python 3  
+**Environment:** Termux (Android) / GitHub  
+**Date:** June 2026
+
+## 1. Project Overview
+**SimpleTaskTracker** is a Command-Line Interface (CLI) application designed to help users manage their daily tasks efficiently. The application allows users to create, track, and organize tasks with priorities and completion statuses, persisting all data in a local text-based database.
+
+## 2. Evolution of the Project
+The project was developed in three key stages:
+
+### Phase 1: Infrastructure Setup
+*   Initial setup of the development environment using **Termux**.
+*   Creation of a version-controlled repository using **Git**.
+*   Integration with **GitHub** for cloud backup and public portfolio showcasing.
+
+### Phase 2: Basic Functionality (MVP)
+The first working version implemented the core **CRUD** (Create, Read, Update, Delete) operations:
+*   Adding tasks to a list.
+*   Viewing the current task list.
+*   Removing tasks.
+*   Saving data to `tasks.txt` to prevent data loss on exit.
+
+### Phase 3: "Pro" Feature Implementation
+The application was upgraded to handle more complex data structures:
+*   **Task Prioritization:** Users can now assign High, Medium, or Low priority to tasks.
+*   **Status Tracking:** Added a "Mark as Done" feature using visual indicators (✅ for completed, ⏳ for pending).
+*   **Data Parsing:** Updated the file system to use a delimited format (`task|priority|status`) to store multiple attributes per task.
+
+## 3. Technical Stack
+*   **Language:** Python 3.x
+*   **Storage:** Flat-file system (`tasks.txt`)
+*   **Version Control:** Git
+*   **Hosting:** GitHub
+*   **OS:** Linux (Termux/Android)
+
+## 4. How to Run
+1. Clone the repository: `git clone https://github.com/Mawaxi/SimpleTaskTracker.git`
+2. Navigate to the directory: `cd SimpleTaskTracker`
+3. Run the application: `python3 main.py`
+
+## 5. Conclusion & Future Improvements
+The project successfully demonstrates the ability to build a functional tool from scratch and manage the full software development lifecycle (SDLC). Future versions could include:
+*   Integration with a SQL database (SQLite).
+*   Adding due dates and timestamps.
+*   A Graphical User Interface (GUI).
+
+---
+

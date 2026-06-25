@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 FILE_NAME = "tasks.txt"
 
@@ -8,71 +9,100 @@ def load_tasks():
     tasks = []
     with open(FILE_NAME, "r") as f:
         for line in f:
-            # Split the line back into its parts
             parts = line.strip().split('|')
-            if len(parts) == 3:
-                tasks.append({'task': parts[0], 'priority': parts[1], 'done': parts[2] == 'True'})
+            if len(parts) == 4:
+                tasks.append({
+                    'task': parts[0], 
+                    'priority': parts[1], 
+                    'done': parts[2] == 'True', 
+                    'due': parts[3]
+                })
     return tasks
 
 def save_tasks(tasks):
     with open(FILE_NAME, "w") as f:
         for t in tasks:
-            f.write(f"{t['task']}|{t['priority']}|{t['done']}\n")
+            f.write(f"{t['task']}|{t['priority']}|{t['done']}|{t['due']}\n")
+
+def get_date_status(due_date):
+    try:
+        today = datetime.now().strftime("%Y-%m-%d")
+        if due_date == today:
+            return "🚨 DUE TODAY!"
+        elif due_date < today:
+            return "⚠️ OVERDUE"
+        return f"📅 Due: {due_date}"
+    except:
+        return "No date"
 
 def main():
     tasks = load_tasks()
-
+    
     while True:
-        print("\n--- 🚀 PRO TASK TRACKER ---")
-        print("1. View Tasks")
-        print("2. Add Task")
-        print("3. Mark Done")
-        print("4. Remove Task")
-        print("5. Exit")
-
-        choice = input("\nChoose an option (1-5): ")
-
+        print("\n--- 🌟 ULTRA TASK TRACKER ---")
+        print(f"Stats: {len(tasks)} Total | {len([t for t in tasks if t['done']])} Done")
+        print("1. View All Tasks")
+        print("2. Add New Task")
+        print("3. Mark Task Done")
+        print("4. Search Tasks")
+        print("5. Remove Task")
+        print("6. Exit")
+        
+        choice = input("\nChoose an option (1-6): ")
+        
         if choice == '1':
             print("\nYOUR TASK LIST:")
             if not tasks:
-                print("Empty! Go enjoy your day! ☀️")
+                print("Everything is clear! ☀️")
             else:
-                print("-" * 30)
+                print(f"{'ID':<3} {'Status':<8} {'Priority':<10} {'Task':<20} {'Deadline'}")
+                print("-" * 60)
                 for i, t in enumerate(tasks, 1):
                     status = "✅" if t['done'] else "⏳"
-                    print(f"{i}. {status} [{t['priority']}] {t['task']}")
-                print("-" * 30)
-
+                    date_info = get_date_status(t['due']) if not t['done'] else "Completed"
+                    print(f"{i:<3} {status:<8} [{t['priority']:<8}] {t['task']:<20} {date_info}")
+                print("-" * 60)
+        
         elif choice == '2':
-            name = input("What needs to be done? ")
+            name = input("Task description: ")
             print("Priority: (H)igh, (M)edium, (L)ow")
             p_choice = input("Select priority: ").upper()
             p_map = {'H': 'High', 'M': 'Medium', 'L': 'Low'}
             priority = p_map.get(p_choice, 'Medium')
-
-            tasks.append({'task': name, 'priority': priority, 'done': False})
+            
+            print("Enter due date (YYYY-MM-DD) or leave blank:")
+            due = input("Date: ").strip()
+            if not due:
+                due = "No Date"
+                
+            tasks.append({'task': name, 'priority': priority, 'done': False, 'due': due})
             save_tasks(tasks)
-            print(f"Added: {name} ({priority})")
-
+            print(f"Successfully added: {name}")
+            
         elif choice == '3':
-            if not tasks:
-                print("Nothing to mark done!")
-                continue
             try:
                 num = int(input("Task number to mark as DONE: "))
                 if 1 <= num <= len(tasks):
                     tasks[num-1]['done'] = True
                     save_tasks(tasks)
-                    print("Task completed! 🎉")
+                    print("Great job! Task completed! 🎉")
                 else:
                     print("Invalid number!")
             except ValueError:
-                print("Please enter a number!")
-
+                print("Please enter a valid number!")
+                
         elif choice == '4':
-            if not tasks:
-                print("Nothing to remove!")
-                continue
+            query = input("Search for keyword: ").lower()
+            results = [t for t in tasks if query in t['task'].lower()]
+            if results:
+                print("\nSearch Results:")
+                for t in results:
+                    status = "✅" if t['done'] else "⏳"
+                    print(f"{status} {t['task']} ({t['priority']})")
+            else:
+                print("No matching tasks found.")
+                
+        elif choice == '5':
             try:
                 num = int(input("Task number to REMOVE: "))
                 if 1 <= num <= len(tasks):
@@ -82,10 +112,10 @@ def main():
                 else:
                     print("Invalid number!")
             except ValueError:
-                print("Please enter a number!")
-
-        elif choice == '5':
-            print("Keep crushing your goals! Goodbye! 👋")
+                print("Please enter a valid number!")
+                
+        elif choice == '6':
+            print("Keep achieving greatness! Goodbye! 👋")
             break
         else:
             print("Invalid choice, try again.")
