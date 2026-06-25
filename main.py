@@ -12,9 +12,9 @@ def load_tasks():
             parts = line.strip().split('|')
             if len(parts) == 4:
                 tasks.append({
-                    'task': parts[0], 
-                    'priority': parts[1], 
-                    'done': parts[2] == 'True', 
+                    'task': parts[0],
+                    'priority': parts[1],
+                    'done': parts[2] == 'True',
                     'due': parts[3]
                 })
     return tasks
@@ -37,7 +37,7 @@ def get_date_status(due_date):
 
 def main():
     tasks = load_tasks()
-    
+
     while True:
         print("\n--- 🌟 ULTRA TASK TRACKER ---")
         print(f"Stats: {len(tasks)} Total | {len([t for t in tasks if t['done']])} Done")
@@ -47,9 +47,9 @@ def main():
         print("4. Search Tasks")
         print("5. Remove Task")
         print("6. Exit")
-        
+
         choice = input("\nChoose an option (1-6): ")
-        
+
         if choice == '1':
             print("\nYOUR TASK LIST:")
             if not tasks:
@@ -62,23 +62,23 @@ def main():
                     date_info = get_date_status(t['due']) if not t['done'] else "Completed"
                     print(f"{i:<3} {status:<8} [{t['priority']:<8}] {t['task']:<20} {date_info}")
                 print("-" * 60)
-        
+
         elif choice == '2':
             name = input("Task description: ")
             print("Priority: (H)igh, (M)edium, (L)ow")
             p_choice = input("Select priority: ").upper()
             p_map = {'H': 'High', 'M': 'Medium', 'L': 'Low'}
             priority = p_map.get(p_choice, 'Medium')
-            
+
             print("Enter due date (YYYY-MM-DD) or leave blank:")
             due = input("Date: ").strip()
             if not due:
                 due = "No Date"
-                
+
             tasks.append({'task': name, 'priority': priority, 'done': False, 'due': due})
             save_tasks(tasks)
             print(f"Successfully added: {name}")
-            
+
         elif choice == '3':
             try:
                 num = int(input("Task number to mark as DONE: "))
@@ -90,7 +90,7 @@ def main():
                     print("Invalid number!")
             except ValueError:
                 print("Please enter a valid number!")
-                
+
         elif choice == '4':
             query = input("Search for keyword: ").lower()
             results = [t for t in tasks if query in t['task'].lower()]
@@ -101,7 +101,7 @@ def main():
                     print(f"{status} {t['task']} ({t['priority']})")
             else:
                 print("No matching tasks found.")
-                
+
         elif choice == '5':
             try:
                 num = int(input("Task number to REMOVE: "))
@@ -113,7 +113,7 @@ def main():
                     print("Invalid number!")
             except ValueError:
                 print("Please enter a valid number!")
-                
+
         elif choice == '6':
             print("Keep achieving greatness! Goodbye! 👋")
             break
